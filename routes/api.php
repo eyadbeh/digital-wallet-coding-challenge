@@ -10,3 +10,4 @@ Route::get('/test', function () {
 });
 
 Route::post('/webhooks/{bank}', [WebhookController::class, 'handle']);
+Route::post('/payments/xml', [WebhookController::class, 'generateXml']);

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\WebhookLog;
+use App\Services\Xml\PaymentXmlGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Jobs\ProcessWebhookJob;
 
 class WebhookController extends Controller
@@ -26,5 +28,16 @@ class WebhookController extends Controller
             'message' => 'Webhook received and queued for processing.',
             'webhook_log_id' => $log->id,
         ], 202);
+    }
+
+    // for testing the receiving money section after completing the Payment XML Generator
+    public function generateXml(Request $request): Response
+    {
+        $generator = new PaymentXmlGenerator();
+        $xml = $generator->generate($request->all());
+
+        return response($xml, 200, [
+            'Content-Type' => 'application/xml',
+        ]);
     }
 }
